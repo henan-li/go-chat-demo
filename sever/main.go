@@ -24,11 +24,11 @@ func process(conn net.Conn){
 func main() {
 	fmt.Println("server listen port: 8889")
 	listen, err := net.Listen("tcp", "0.0.0.0:8889")
-	defer listen.Close()
 	if err != nil {
 		fmt.Println("net.listen error=", err)
 		return
 	}
+	defer listen.Close()
 
 	for {
 		fmt.Println("wait for client to connect...")
