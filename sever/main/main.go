@@ -5,20 +5,18 @@ import (
 	"net"
 )
 
-func process(conn net.Conn){
+
+func process(conn net.Conn) {
 	defer conn.Close()
-
-	for{
-		buf := make([]byte,8096)
-		fmt.Println("read data from client")
-		n,e := conn.Read(buf[:4])
-		if e != nil || n != 4{
-			fmt.Println("reading err=",e)
-			return
-		}
-
-		fmt.Println("buf read=",buf)
+	processor := &Processor{
+		Conn: conn,
 	}
+	err := processor.process2()
+	if err != nil {
+		fmt.Println("server main.go 121 err = ", err)
+		return
+	}
+
 }
 
 func main() {
@@ -34,7 +32,7 @@ func main() {
 		fmt.Println("wait for client to connect...")
 		conn, err := listen.Accept()
 		if err != nil {
-			fmt.Println("listen.accept err=",err)
+			fmt.Println("listen.accept err=", err)
 		}
 
 		go process(conn)

@@ -18,34 +18,36 @@ func login(userId int, userPwd string) (err error) {
 	//	},
 	//}
 
-	// save use inputs
+	// save into struct
 	var loginMes message.LoginMes
 	loginMes.USERID = userId
 	loginMes.USERPWD = userPwd
 	loginMes.USERNAME = ""
+
+	// prepare, server need {type:xxxx,data:{xxx}}, which is message.Message struct
+	var mes message.Message
 	data, e := json.Marshal(loginMes)
-	if e != nil{
-		fmt.Println("json.marshal err=",e)
+	if e != nil {
+		fmt.Println("json.marshal err=", e)
 	}
 
-	// prepare user login data for server
-	var mes message.Message
 	mes.TYPE = message.LoginMesType
 	mes.DATA = string(data)
-	data,e=json.Marshal(mes)
-	if e != nil{
-		fmt.Println("json.marshel msg err=",e)
+
+	data, e = json.Marshal(mes)
+	if e != nil {
+		fmt.Println("json.marshel msg err=", e)
 		return
 	}
 
-	// now, need to send data to server
+	// send
 	var pkgLen uint32
 	pkgLen = uint32(len(data))
 
 	var buf [4]byte
-	binary.BigEndian.PutUint32(buf[0:4],pkgLen)
+	binary.BigEndian.PutUint32(buf[0:4], pkgLen)
 
-	// send data length first
+	// connect tcp
 	conn, e := net.Dial("tcp", "localhost:8889")
 	if e != nil {
 		fmt.Println("net.dial connect error=", e)
@@ -53,12 +55,41 @@ func login(userId int, userPwd string) (err error) {
 	}
 	defer conn.Close()
 
-	n,e:=conn.Write(buf[:4])
-	if n!=4 || e != nil{
-		fmt.Println("conn.write(bytes) fail, err=",e)
+	// send data length first
+	n, e := conn.Write(buf[:4])
+	if n != 4 || e != nil {
+		fmt.Println("conn.write(bytes) fail, err=", e)
 		return
 	}
 
-	fmt.Printf("length has sent to server,length=%d, data = %s",len(data),string(data))
+	//fmt.Printf("length has sent to server,length=%d, data = %s",len(data),string(data))
+	// send login data
+	_, e = conn.Write(data)
+	if e != nil {
+		fmt.Println("conn.write(data) fail, err=", e)
+		return
+	}
+
+	// receive res from server (struct is message.Message)
+	mse, err := readPkg(conn)
+	if err != nil {
+		fmt.Println("login.go line 71, err=", e)
+		return
+	}
+
+	// write response msg into login response struct
+	var loginMesRes message.LoginResMes
+	err = json.Unmarshal([]byte(mse.DATA), &loginMesRes)
+	if err != nil {
+		fmt.Println("login.go line 79, err=", e)
+		return
+	}
+
+	// notify result
+	if loginMesRes.CODE == 200 {
+		fmt.Println(loginMesRes.ERROR)
+	} else {
+		fmt.Println(loginMesRes.ERROR)
+	}
 	return
 }

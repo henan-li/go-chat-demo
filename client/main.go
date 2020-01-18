@@ -17,7 +17,7 @@ func main() {
 		fmt.Println("logout")
 		fmt.Println("pls enter 1,2 or 3 to continue")
 
-		fmt.Scanf("%d", &key)
+		fmt.Scanf("%d\n", &key)
 
 		switch key {
 		case 1:
@@ -35,21 +35,16 @@ func main() {
 	}
 
 	if key == 1 {
-		fmt.Println("enter user id and pwd")
-		fmt.Scanf("%d", &userId)
-		fmt.Scanf("%s", &userPwd)
+		fmt.Println("enter user id")
+		fmt.Scanf("%d\n", &userId)
+		fmt.Println("enter pwd")
+		fmt.Scanf("%s\n", &userPwd)
 
-		err := login(userId, userPwd)
-		if err != nil {
-			fmt.Println("user info is wrong")
-		} else {
-			fmt.Println("login ok")
-		}
+		login(userId, userPwd)
 	} else if key == 2 {
 		fmt.Println("register")
 	}
 }
-
 
 // when you run, you need to create a go run config. in the config page. change run kind from file to dir
 // and enter the dir of current main.go file. it will compile all go files under this dir
