@@ -76,3 +76,54 @@ func (this *UserProcess) ServerProcessLogin(mse *message.Message) (err error) {
 
 	return
 }
+
+func (this *UserProcess) ServerProcessRegister(mse *message.Message) (err error) {
+	var registerMse message.RegisterMes
+	err = json.Unmarshal([]byte(mse.DATA), &registerMse)
+	if err != nil {
+		fmt.Println("serverProcessRegister Unmarshal fail, err = ", err)
+		return
+	}
+
+	var registerResMes message.RegisterResMes
+	err = model.MyUserDao.Register(&registerMse.User)
+	if err != nil {
+
+		if err == model.ERROR_USER_EXISTS {
+			registerResMes.CODE = 505
+			registerResMes.ERROR = model.ERROR_USER_EXISTS.Error()
+		}else{
+			registerResMes.CODE = 506
+			registerResMes.ERROR = "internal server error"
+		}
+
+	} else {
+		registerResMes.CODE = 200
+		registerResMes.ERROR = "ok"
+		//fmt.Println("user is ", user)
+	}
+
+	// prepare response (client and server both use message.Message struct to keep consistence)
+	var resMse message.Message
+	data, err := json.Marshal(registerResMes)
+	if err != nil {
+		fmt.Println("line 110, marshal err, err = ", err)
+		return
+	}
+	resMse.TYPE = message.RegisterResMesType
+	resMse.DATA = string(data)
+
+	// return to client
+	data, err = json.Marshal(resMse)
+	if err != nil {
+		fmt.Println("line 119, marshal err, err = ", err)
+		return
+	}
+
+	tf := &utils.Transfer{
+		Conn: this.Conn,
+	}
+	err = tf.WritePkg(data)
+
+	return
+}

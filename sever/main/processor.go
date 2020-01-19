@@ -23,7 +23,10 @@ func (this *Processor) serverProcessMse(mse *message.Message) (err error) {
 		}
 		err = up.ServerProcessLogin(mse)
 	case message.RegisterMesType:
-
+		up := &process2.UserProcess{
+			Conn: this.Conn,
+		}
+		err = up.ServerProcessRegister(mse)
 	default:
 		fmt.Println("msg type is wrong, can not handle this request")
 	}

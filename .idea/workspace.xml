@@ -2,18 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cc0f2c41-d2c3-414a-b274-d906bd68c3a4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/client/process/server.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/process/smsProcess.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/process/userProcess.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sever/main/redis.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sever/model/error.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sever/model/user.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sever/model/userDao.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/message/user.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/login.go" beforeDir="false" afterPath="$PROJECT_DIR$/client/login.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/client/main/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/utils.go" beforeDir="false" afterPath="$PROJECT_DIR$/client/utils/utils.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sever/main/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/sever/main/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/main/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/client/main/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/process/userProcess.go" beforeDir="false" afterPath="$PROJECT_DIR$/client/process/userProcess.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/message/message.go" beforeDir="false" afterPath="$PROJECT_DIR$/common/message/message.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sever/main/processor.go" beforeDir="false" afterPath="$PROJECT_DIR$/sever/main/processor.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sever/model/userDao.go" beforeDir="false" afterPath="$PROJECT_DIR$/sever/model/userDao.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sever/process/userProcess.go" beforeDir="false" afterPath="$PROJECT_DIR$/sever/process/userProcess.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -46,11 +41,12 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.import.settings.migrated" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/client/utils" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/common/message" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Natha\OneDrive\Desktop\go-chat-demo\common\message" />
       <recent name="C:\Users\Natha\OneDrive\Desktop\go-chat-demo\client\utils" />
     </key>
     <key name="MoveFile.RECENT_KEYS">

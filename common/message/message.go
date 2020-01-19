@@ -4,6 +4,7 @@ const (
 	LoginMesType    = "LoginMes"
 	LoginResMesType = "LoginResMes"
 	RegisterMesType = "RegisterMes"
+	RegisterResMesType = "RegisterResMes"
 )
 
 // for general info
@@ -27,5 +28,10 @@ type LoginResMes struct {
 
 
 type RegisterMes struct {
+	User User `json:"user"`
+}
 
+type RegisterResMes struct {
+	CODE  int    `json:"code"`
+	ERROR string `json:"error"`
 }

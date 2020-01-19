@@ -1,6 +1,7 @@
 package model
 
 import (
+	"../../common/message"
 	"encoding/json"
 	"fmt"
 	"github.com/garyburd/redigo/redis"
@@ -59,5 +60,31 @@ func (this *UserDao) Login(userId int, userPwd string) (user *User,err error) {
 func NewUserDao(pool *redis.Pool) (userDao *UserDao) {
 
 	userDao = &UserDao{pool:pool,}
+	return
+}
+
+func (this *UserDao) Register(user *message.User) (err error) {
+
+	conn := this.pool.Get()
+	defer conn.Close()
+
+	user,err = this.GetUserById(conn,user.UserId)
+
+	if err == nil{
+		err = ERROR_USER_EXISTS
+		return
+	}
+
+	data,err := json.Marshal(user)
+	if err != nil {
+
+		return
+	}
+
+	_,err = conn.Do("hset","users",user.UserId,string(data))
+	if err != nil {
+		fmt.Println("register failed,err = ",err)
+		return
+	}
 	return
 }

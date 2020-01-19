@@ -5,6 +5,7 @@ import "../process"
 
 var userId int
 var userPwd string
+var userName string
 
 func main() {
 
@@ -46,6 +47,15 @@ func main() {
 
 	} else if key == 2 {
 		fmt.Println("register")
+		fmt.Println("enter user id")
+		fmt.Scanf("%d\n", &userId)
+		fmt.Println("enter pwd")
+		fmt.Scanf("%s\n", &userPwd)
+		fmt.Println("enter username")
+		fmt.Scanf("%s\n", &userName)
+
+		up := &process.UserProcess{}
+		up.Register(userId, userPwd,userName)
 	}
 }
 

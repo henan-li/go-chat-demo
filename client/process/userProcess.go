@@ -10,7 +10,6 @@ import (
 )
 
 type UserProcess struct {
-
 }
 
 func (this *UserProcess) Login(userId int, userPwd string) (err error) {
@@ -98,11 +97,76 @@ func (this *UserProcess) Login(userId int, userPwd string) (err error) {
 	if loginMesRes.CODE == 200 {
 		go serverProcessMes(conn)
 		//fmt.Println(loginMesRes.ERROR)
-		for{
+		for {
 			ShowMenu()
 		}
 	} else {
 		fmt.Println(loginMesRes.ERROR)
+	}
+	return
+}
+
+func (this *UserProcess) Register(userId int, userPwd string, userName string) (err error) {
+
+	conn, e := net.Dial("tcp", "localhost:8889")
+	if e != nil {
+		fmt.Println("net.dial connect error=", e)
+		return
+	}
+	defer conn.Close()
+
+	var registerMes message.RegisterMes
+	registerMes.User.UserId = userId
+	registerMes.User.UserPwd = userPwd
+	registerMes.User.UserName = userName
+
+	var mes message.Message
+	data, e := json.Marshal(registerMes)
+	if e != nil {
+		fmt.Println("json.marshal err=", e)
+	}
+
+	mes.TYPE = message.RegisterMesType
+	mes.DATA = string(data)
+
+	data, e = json.Marshal(mes)
+	if e != nil {
+		fmt.Println("json.marshel msg err=", e)
+		return
+	}
+
+	tf := &utils.Transfer{
+		Conn: conn,
+		Buf:  [8096]byte{},
+	}
+
+	e = tf.WritePkg(data)
+	if e != nil {
+		fmt.Println("conn.write(data) fail, err=", e)
+		return
+	}
+
+	mse, err := tf.ReadPkg()
+	if err != nil {
+		fmt.Println("login.go line 71, err=", e)
+		return
+	}
+
+	var registerMesRes message.RegisterResMes
+	err = json.Unmarshal([]byte(mse.DATA), &registerMesRes)
+	if err != nil {
+		fmt.Println("login.go line 79, err=", e)
+		return
+	}
+
+	if registerMesRes.CODE == 200 {
+		go serverProcessMes(conn)
+
+		for {
+			ShowMenu()
+		}
+	} else {
+		fmt.Println(registerMesRes.ERROR)
 	}
 	return
 }
