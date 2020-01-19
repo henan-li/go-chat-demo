@@ -1,8 +1,10 @@
 package main
 
 import (
+	"../model"
 	"fmt"
 	"net"
+	"time"
 )
 
 
@@ -19,7 +21,12 @@ func process(conn net.Conn) {
 
 }
 
+// listen, accept and assign work
 func main() {
+	// redis conn
+	initPool("localhost:6379",16,0,300*time.Second)
+	initUserDao()
+
 	fmt.Println("server listen port: 8889")
 	listen, err := net.Listen("tcp", "0.0.0.0:8889")
 	if err != nil {
@@ -37,4 +44,8 @@ func main() {
 
 		go process(conn)
 	}
+}
+
+func initUserDao(){
+	model.MyUserDao = model.NewUserDao(pool)
 }

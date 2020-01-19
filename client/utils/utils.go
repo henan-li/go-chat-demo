@@ -1,7 +1,7 @@
-package main
+package utils
 
 import (
-	"../common/message"
+	"../../common/message"
 	"encoding/binary"
 	"encoding/json"
 	"errors"
@@ -9,19 +9,24 @@ import (
 	"net"
 )
 
-func writePkg(conn net.Conn, data []byte) (err error) {
+type Transfer struct {
+	Conn net.Conn
+	Buf  [8096]byte
+}
+
+func (this *Transfer) WritePkg(data []byte) (err error) {
 	// send length to client
 	var pkgLen uint32
 	pkgLen = uint32(len(data))
-	var buf [4]byte
-	binary.BigEndian.PutUint32(buf[:4], pkgLen)
-	n, err := conn.Write(buf[:4])
+	//var buf [4]byte
+	binary.BigEndian.PutUint32(this.Buf[:4], pkgLen)
+	n, err := this.Conn.Write(this.Buf[:4])
 	if n != 4 || err != nil {
 		fmt.Println("err at 63, ", err)
 		return
 	}
 
-	n, err = conn.Write(data)
+	n, err = this.Conn.Write(data)
 	if n != int(pkgLen) || err != nil {
 		fmt.Println("err at 69, ", err)
 		return
@@ -29,11 +34,11 @@ func writePkg(conn net.Conn, data []byte) (err error) {
 	return
 }
 
-func readPkg(conn net.Conn) (mes message.Message, err error) {
+func (this *Transfer) ReadPkg() (mes message.Message, err error) {
 
-	buf := make([]byte, 8096)
+	//buf := make([]byte, 8096)
 	fmt.Println("read data from client")
-	_, err = conn.Read(buf[:4])
+	_, err = this.Conn.Read(this.Buf[:4])
 	if err != nil {
 		//e = errors.New("reading pkg header error")
 		return
@@ -42,15 +47,16 @@ func readPkg(conn net.Conn) (mes message.Message, err error) {
 	// 将bytes转成长度
 	// for example, the msg is: abc啊啊, it is 7bytes but the length is 5
 	var pkgLen uint32
-	pkgLen = binary.BigEndian.Uint32(buf[0:4])
-	n, err := conn.Read(buf[:pkgLen])
+	pkgLen = binary.BigEndian.Uint32(this.Buf[0:4])
+	n, err := this.Conn.Read(this.Buf[:pkgLen])
 
 	if n != int(pkgLen) || err != nil {
 		err = errors.New("reading pkg body error")
 		return
 	}
 
-	err = json.Unmarshal(buf[:pkgLen], &mes)
+	// new(message.Message), pointer as unmarshal second param
+	err = json.Unmarshal(this.Buf[:pkgLen], &mes)
 	if err != nil {
 		fmt.Println("unmarshal fail, err = ", err)
 		return

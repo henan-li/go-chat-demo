@@ -2,12 +2,12 @@ package process2
 
 import (
 	"../../common/message"
+	"../model"
 	"../utils"
 	"encoding/json"
 	"fmt"
 	"net"
 )
-
 
 type UserProcess struct {
 	Conn net.Conn
@@ -25,12 +25,31 @@ func (this *UserProcess) ServerProcessLogin(mse *message.Message) (err error) {
 
 	// verify and put login attempt result into struct
 	var loginResMes message.LoginResMes
-	if loginMse.USERID == 123 && loginMse.USERPWD == "test" {
+	//if loginMse.USERID == 123 && loginMse.USERPWD == "test" {
+	//	loginResMes.CODE = 200
+	//	loginResMes.ERROR = "ok"
+	//} else {
+	//	loginResMes.CODE = 500
+	//	loginResMes.ERROR = "fail"
+	//}
+	user, err := model.MyUserDao.Login(loginMse.USERID, loginMse.USERPWD)
+	if err != nil {
+
+		if err == model.ERROR_USER_NOTEXISTS {
+			loginResMes.CODE = 500
+			loginResMes.ERROR = err.Error()
+		} else if err == model.ERROR_USER_PWD {
+			loginResMes.CODE = 403
+			loginResMes.ERROR = err.Error()
+		} else {
+			loginResMes.CODE = 505
+			loginResMes.ERROR = "internal error"
+		}
+
+	} else {
 		loginResMes.CODE = 200
 		loginResMes.ERROR = "ok"
-	} else {
-		loginResMes.CODE = 500
-		loginResMes.ERROR = "fail"
+		fmt.Println("user is ", user)
 	}
 
 	// prepare response (client and server both use message.Message struct to keep consistence)
@@ -51,7 +70,7 @@ func (this *UserProcess) ServerProcessLogin(mse *message.Message) (err error) {
 	}
 
 	tf := &utils.Transfer{
-		Conn:this.Conn,
+		Conn: this.Conn,
 	}
 	err = tf.WritePkg(data)
 

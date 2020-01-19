@@ -1,6 +1,7 @@
 package main
 
 import "fmt"
+import "../process"
 
 var userId int
 var userPwd string
@@ -40,7 +41,9 @@ func main() {
 		fmt.Println("enter pwd")
 		fmt.Scanf("%s\n", &userPwd)
 
-		login(userId, userPwd)
+		up := &process.UserProcess{}
+		up.Login(userId, userPwd)
+
 	} else if key == 2 {
 		fmt.Println("register")
 	}
