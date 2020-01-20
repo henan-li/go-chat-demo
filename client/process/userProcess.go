@@ -96,6 +96,10 @@ func (this *UserProcess) Login(userId int, userPwd string) (err error) {
 	// notify result
 	if loginMesRes.CODE == 200 {
 
+		CurUser.Conn = conn
+		CurUser.UserId = userId
+		CurUser.UserStatus = message.UserOnline
+
 		fmt.Println("current users")
 		for _,v := range loginMesRes.Usersid{
 

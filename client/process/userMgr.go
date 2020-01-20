@@ -2,10 +2,12 @@ package process
 
 import (
 	"../../common/message"
+	"../model"
 	"fmt"
 )
 
 var onlineUsers map[int]*message.User = make(map[int]*message.User, 10)
+var CurUser model.CurUser
 
 func updateUserStatus(notifyUserStatusMes *message.NotifyUserStatusMes) {
 

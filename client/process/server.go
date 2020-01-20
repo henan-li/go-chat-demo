@@ -20,12 +20,18 @@ func ShowMenu() {
 	var key int
 	fmt.Scanf("%d\n", &key)
 
+	var content string
+	smsProcess := &SmsProcess{}
+
+
 	switch key {
 	case 1:
 		//fmt.Println("1. view all users")
 		outputOnlineUser()
 	case 2:
-		fmt.Println("2. send msg")
+		fmt.Println("enter the content")
+		fmt.Scanf("%s\n",&content)
+		smsProcess.sendGroupMes(content)
 	case 3:
 		fmt.Println("3. msg list")
 	case 4:
@@ -57,6 +63,8 @@ func serverProcessMes(conn net.Conn){
 			var notifyUserStatusMes message.NotifyUserStatusMes
 			json.Unmarshal([]byte(mes.DATA),&notifyUserStatusMes)
 			updateUserStatus(&notifyUserStatusMes)
+		case message.SmsMesType:
+			outputGroupMse(&mes)
 		default:
 			fmt.Println("server return unknown data type")
 		}

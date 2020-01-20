@@ -16,6 +16,8 @@ type Processor struct {
 // call different function based on msg type
 func (this *Processor) serverProcessMse(mse *message.Message) (err error) {
 
+	fmt.Println("client send msg is ", mse)
+
 	switch mse.TYPE {
 	case message.LoginMesType:
 		up := &process2.UserProcess{
@@ -27,6 +29,11 @@ func (this *Processor) serverProcessMse(mse *message.Message) (err error) {
 			Conn: this.Conn,
 		}
 		err = up.ServerProcessRegister(mse)
+	case message.SmsMesType:
+		smsProcess := &process2.SmsProcess{
+
+		}
+		smsProcess.SendGroupMes(mse)
 	default:
 		fmt.Println("msg type is wrong, can not handle this request")
 	}
