@@ -2,13 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cc0f2c41-d2c3-414a-b274-d906bd68c3a4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/common/message/user.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/process/userMgr.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sever/process/userMgr.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/main/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/client/main/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/process/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/client/process/server.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/process/userProcess.go" beforeDir="false" afterPath="$PROJECT_DIR$/client/process/userProcess.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/message/message.go" beforeDir="false" afterPath="$PROJECT_DIR$/common/message/message.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sever/main/processor.go" beforeDir="false" afterPath="$PROJECT_DIR$/sever/main/processor.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sever/model/userDao.go" beforeDir="false" afterPath="$PROJECT_DIR$/sever/model/userDao.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/message/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/common/message/user.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sever/process/userProcess.go" beforeDir="false" afterPath="$PROJECT_DIR$/sever/process/userProcess.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

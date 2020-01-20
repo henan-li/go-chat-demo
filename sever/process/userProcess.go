@@ -11,6 +11,7 @@ import (
 
 type UserProcess struct {
 	Conn net.Conn
+	UserId int
 }
 
 func (this *UserProcess) ServerProcessLogin(mse *message.Message) (err error) {
@@ -49,6 +50,14 @@ func (this *UserProcess) ServerProcessLogin(mse *message.Message) (err error) {
 	} else {
 		loginResMes.CODE = 200
 		loginResMes.ERROR = "ok"
+
+		this.UserId = loginMse.USERID
+		userMgr.AddOnlineUser(this)
+		this.NotifyOthersOnlineUser(loginMse.USERID)
+		for id,_ := range userMgr.onlineUsers{
+			loginResMes.Usersid = append(loginResMes.Usersid,id)
+		}
+
 		fmt.Println("user is ", user)
 	}
 
@@ -126,4 +135,49 @@ func (this *UserProcess) ServerProcessRegister(mse *message.Message) (err error)
 	err = tf.WritePkg(data)
 
 	return
+}
+
+func (this *UserProcess) NotifyOthersOnlineUser (userid int)  {
+
+	for id,up := range userMgr.onlineUsers{
+		if id == userid{
+			continue
+		}
+		up.NotifyMeOnline(userid)
+	}
+}
+
+func (this *UserProcess) NotifyMeOnline (userid int)  {
+
+	var mes message.Message
+	mes.TYPE = message.NotifyUserStatusMesType
+
+	var notifyUserStatusMes message.NotifyUserStatusMes
+	notifyUserStatusMes.UserId = userid
+	notifyUserStatusMes.Status = message.UserOnline
+
+	data,err := json.Marshal(notifyUserStatusMes)
+	if err != nil{
+		fmt.Println("error = ",err)
+		return
+	}
+
+	mes.DATA = string(data)
+
+	data,err = json.Marshal(mes)
+	if err != nil{
+		fmt.Println("error = ",err)
+		return
+	}
+
+	tf := &utils.Transfer{
+		Conn: this.Conn,
+		Buf:  [8096]byte{},
+	}
+
+	err = tf.WritePkg(data)
+	if err != nil{
+		fmt.Println("notify fail, err = ",err)
+		return
+	}
 }

@@ -1,7 +1,9 @@
 package process
 
 import (
+	"../../common/message"
 	"../utils"
+	"encoding/json"
 	"fmt"
 	"net"
 	"os"
@@ -20,7 +22,8 @@ func ShowMenu() {
 
 	switch key {
 	case 1:
-		fmt.Println("1. view all users")
+		//fmt.Println("1. view all users")
+		outputOnlineUser()
 	case 2:
 		fmt.Println("2. send msg")
 	case 3:
@@ -42,12 +45,20 @@ func serverProcessMes(conn net.Conn){
 	}
 
 	for{
-		msg,err := tf.ReadPkg()
+		mes,err := tf.ReadPkg()
 		if err != nil{
 			fmt.Println("communication error, err = ",err)
 			return
 		}
 
-		fmt.Println("reading msg is ",msg)
+		//fmt.Println("reading msg is ",msg)
+		switch mes.TYPE {
+		case message.NotifyUserStatusMesType:
+			var notifyUserStatusMes message.NotifyUserStatusMes
+			json.Unmarshal([]byte(mes.DATA),&notifyUserStatusMes)
+			updateUserStatus(&notifyUserStatusMes)
+		default:
+			fmt.Println("server return unknown data type")
+		}
 	}
 }

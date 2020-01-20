@@ -95,6 +95,24 @@ func (this *UserProcess) Login(userId int, userPwd string) (err error) {
 
 	// notify result
 	if loginMesRes.CODE == 200 {
+
+		fmt.Println("current users")
+		for _,v := range loginMesRes.Usersid{
+
+			if v == userId {
+				continue
+			}
+			fmt.Println("user id \t",v)
+
+			user := &message.User{
+				UserId:     v,
+				UserPwd:    "",
+				UserName:   "",
+				UserStatus: message.UserOnline,
+			}
+			onlineUsers[v] = user
+		}
+		fmt.Println("\n\n")
 		go serverProcessMes(conn)
 		//fmt.Println(loginMesRes.ERROR)
 		for {

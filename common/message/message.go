@@ -1,10 +1,17 @@
 package message
 
 const (
-	LoginMesType    = "LoginMes"
-	LoginResMesType = "LoginResMes"
-	RegisterMesType = "RegisterMes"
-	RegisterResMesType = "RegisterResMes"
+	LoginMesType            = "LoginMes"
+	LoginResMesType         = "LoginResMes"
+	RegisterMesType         = "RegisterMes"
+	RegisterResMesType      = "RegisterResMes"
+	NotifyUserStatusMesType = "NotifyUserStatusMes"
+)
+
+const (
+	UserOnline = iota
+	UserOffline
+	UserBusyStatus
 )
 
 // for general info
@@ -22,10 +29,10 @@ type LoginMes struct {
 
 // for login info response, server->client
 type LoginResMes struct {
-	CODE  int    `json:"code"`
-	ERROR string `json:"error"`
+	CODE    int    `json:"code"`
+	ERROR   string `json:"error"`
+	Usersid []int
 }
-
 
 type RegisterMes struct {
 	User User `json:"user"`
@@ -34,4 +41,9 @@ type RegisterMes struct {
 type RegisterResMes struct {
 	CODE  int    `json:"code"`
 	ERROR string `json:"error"`
+}
+
+type NotifyUserStatusMes struct {
+	UserId int `json:"userId"`
+	Status int `json:"status"`
 }
